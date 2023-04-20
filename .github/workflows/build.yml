@@ -1,0 +1,43 @@
+name: Beta Build Game
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install Haxe and dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y haxe
+        sudo haxelib setup
+        haxelib install all
+
+    - name: Build game
+      run: lime build linux
+
+    - name: Create release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v0.0.1
+        release_name: Beta v0.0.1
+        body: This is the first release of the game.
+        draft: false
+        prerelease: true
+
+    - name: Upload game artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: Game artifacts
+        path: export/linux64
