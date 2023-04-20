@@ -13,9 +13,14 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
 
     - name: Install neko
       run: sudo apt-get install -y neko
+
+    - name: Install openfl library
+      run: haxelib install openfl
 
     - name: Install Haxe and dependencies
       run: |
