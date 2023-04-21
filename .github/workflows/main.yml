@@ -1,0 +1,34 @@
+name: Build Game
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+      
+    - name: Install Haxe and dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y haxe
+        haxelib setup
+        haxelib install all
+        haxelib install openfl
+
+    - name: Build game
+      run: lime build android
+
+    - name: Upload game artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: Game artifacts
+        path: export/android
