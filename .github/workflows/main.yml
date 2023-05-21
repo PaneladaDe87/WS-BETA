@@ -20,9 +20,9 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y haxe
-        haxelib setup
-        haxelib install lime
-        haxelib install openfl
+        haxelib -y setup
+        haxelib install -y lime
+        haxelib install -y openfl
 
     - name: Build game
       run: lime build android
@@ -31,4 +31,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: Game artifacts
-        path: export/android/bin/build.apk
+        path: export/android/bin/apk
